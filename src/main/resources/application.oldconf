@@ -1,0 +1,176 @@
+# In this file you can override any option defined in the reference files.
+# Copy in parts of the reference files and modify as you please.
+akka {
+  # Loggers to register at boot time (akka.event.Logging$DefaultLogger logs
+  # to STDOUT)
+  loggers = ["akka.event.slf4j.Slf4jLogger"]
+  event-handlers = ["akka.event.slf4j.Slf4jEventHandler"]
+  # Log level used by the configured loggers (see "loggers") as soon
+  # as they have been started; before that, see "stdout-loglevel"
+  # Options: OFF, ERROR, WARNING, INFO, DEBUG
+  loglevel = "DEBUG"
+  # Log level for the very basic logger activated during ActorSystem startup.
+  # This logger prints the log messages to stdout (System.out).
+  # Options: OFF, ERROR, WARNING, INFO, DEBUG
+  stdout-loglevel = "DEBUG"
+  # Filter of log events that is used by the LoggingAdapter before
+  # publishing log events to the eventStream.
+  logging-filter = "akka.event.slf4j.Slf4jLoggingFilter"
+  actor {
+    provider = "akka.cluster.ClusterActorRefProvider"
+    default-dispatcher {
+      # Throughput for default Dispatcher, set to 1 for as fair as possible
+      throughput = 10
+    }
+  }
+  remote {
+    # The port clients should connect to. Default is 2552.
+    netty.tcp.port = 4711
+  }
+  extensions = ["com.datiobd.mike.tools.CountExtension"]
+}
+
+akka.http {
+  server {
+    server-header = mikeApi
+    idle-timeout = 60 s
+    request-timeout = 20 s
+    bind-timeout = 1s
+    max-connections = 1024
+    pipelining-limit = 16
+    remote-address-header = off
+    raw-request-uri-header = off
+    transparent-head-requests = on
+    verbose-error-messages = off
+    response-header-size-hint = 512
+    backlog = 100
+    default-host-header = ""
+    socket-options {
+      so-receive-buffer-size = undefined
+      so-send-buffer-size = undefined
+      so-reuse-address = undefined
+      so-traffic-class = undefined
+      tcp-keep-alive = undefined
+      tcp-oob-inline = undefined
+      tcp-no-delay = undefined
+    }
+    parsing {
+    }
+  }
+  client {
+    user-agent-header = mikeApi
+    connecting-timeout = 10s
+    idle-timeout = 60 s
+    request-header-size-hint = 512
+    proxy {
+      http = default
+      https = default
+    }
+    socket-options {
+      so-receive-buffer-size = undefined
+      so-send-buffer-size = undefined
+      so-reuse-address = undefined
+      so-traffic-class = undefined
+      tcp-keep-alive = undefined
+      tcp-oob-inline = undefined
+      tcp-no-delay = undefined
+    }
+    parsing {
+    }
+  }
+  host-connection-pool {
+    max-connections = 4
+    max-retries = 5
+    max-open-requests = 32
+    pipelining-limit = 1
+    idle-timeout = 30 s
+    client = {
+      user-agent-header = mikeApi
+      connecting-timeout = 10s
+      idle-timeout = 60 s
+      request-header-size-hint = 512
+      proxy {
+        http = default
+        https = default
+      }
+      socket-options {
+        so-receive-buffer-size = undefined
+        so-send-buffer-size = undefined
+        so-reuse-address = undefined
+        so-traffic-class = undefined
+        tcp-keep-alive = undefined
+        tcp-oob-inline = undefined
+        tcp-no-delay = undefined
+      }
+      parsing {
+      }
+    }
+  }
+  parsing {
+    max-uri-length             = 2k
+    max-method-length          = 16
+    max-response-reason-length = 64
+    max-header-name-length     = 64
+    max-header-value-length    = 8k
+    max-header-count           = 64
+    max-chunk-ext-length       = 256
+    max-chunk-size             = 1m
+    max-content-length = 8m
+    uri-parsing-mode = strict
+    cookie-parsing-mode = rfc6265
+    illegal-header-warnings = on
+    error-logging-verbosity = full
+    header-cache {
+      default = 12
+      Content-MD5 = 0
+      Date = 0
+      If-Match = 0
+      If-Modified-Since = 0
+      If-None-Match = 0
+      If-Range = 0
+      If-Unmodified-Since = 0
+      User-Agent = 32
+    }
+    tls-session-info-header = off
+  }
+}
+
+
+akka.http.routing {
+  verbose-error-messages = off
+  file-get-conditional = on
+  render-vanity-footer = yes
+  range-coalescing-threshold = 80
+  range-count-limit = 16
+  decode-max-bytes-per-chunk = 1m
+  file-io-dispatcher = ${akka.stream.blocking-io-dispatcher}
+}
+
+application {
+  port = 1337
+  port = ${?PORT}
+}
+
+// EXAMPLE CONFIGURATIONS
+//akka {
+//  loglevel = INFO
+// stdout-loglevel = INFO
+//  loggers = ["akka.event.slf4j.Slf4jLogger"]
+//  default-dispatcher {
+//    fork-join-executor {
+//      parallelism-min = 8
+//    }
+//  }
+//  test {
+//    timefactor = 1
+//  }
+//}
+
+
+
+//http {
+//  host = "0.0.0.0"
+//  host = ${?HOST}
+//  port = 1337
+//  port = ${?PORT}
+//}
