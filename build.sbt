@@ -1,11 +1,11 @@
 enablePlugins(JavaServerAppPackaging)
 
-name := "mike-api-scala-akka-poc-1"
+name := "mike-reactive-api"
 organization := "com.datiobd.mike"
 version := "0.1"
 
 scalaVersion := "2.11.7"
-scalacOptions := Seq("-unchecked", "-feature", "-deprecation", "-encoding", "utf8")
+//scalacOptions := Seq("-unchecked", "-feature", "-deprecation", "-encoding", "utf8")
 
 resolvers ++= Seq(
   //"Akka Snapshot Repository" at "http://repo.akka.io/snapshots/",
@@ -23,6 +23,7 @@ libraryDependencies ++= {
   val scalaMockVersion = "3.2.2"
   val scalazScalaTestV = "0.2.3"
   val slickVersion = "3.1.0"
+  val Json4sVersion     = "3.2.11"
 
   Seq(
     "com.typesafe"      %  "config"                               % typesafeConfigVersion,
@@ -30,6 +31,7 @@ libraryDependencies ++= {
     "com.typesafe.akka" %% "akka-slf4j"                           % akkaVersion,
     "com.typesafe.akka" %% "akka-http-core"                       % akkaVersion, //A complete, mostly low-level, server- and client-side implementation of HTTP (incl. WebSockets)
     "com.typesafe.akka" %% "akka-cluster"                         % akkaVersion, //A complete, mostly low-level, server- and client-side implementation of HTTP (incl. WebSockets)
+    "com.typesafe.akka" %% "akka-cluster-tools"                   % akkaVersion,
     "com.typesafe.akka" %% "akka-http-testkit"                    % akkaVersion, //A test harness and set of utilities for verifying server-side service implementations
     "com.typesafe.akka" %% "akka-http-spray-json-experimental"    % akkaVersion, //Predefined glue-code for (de)serializing custom types from/to JSON with spray-json
     "io.spray"          %% "spray-json"                           % sprayJsonVersion,
@@ -39,13 +41,16 @@ libraryDependencies ++= {
         ExclusionRule(organization = "javax.jms",name="jms")),
     "com.typesafe.akka"  %% "akka-stream-experimental"             % akkaStreamVersion,
     "com.typesafe.akka"  %% "akka-http-core-experimental"          % akkaStreamVersion,
-    "com.typesafe.akka"  %% "akka-http-spray-json-experimental"    % akkaStreamVersion,
+    //"com.typesafe.akka"  %% "akka-http-spray-json-experimental"    % akkaStreamVersion,
     "org.mindrot"        %  "jbcrypt"                              % "0.3m",
     "org.flywaydb"       %  "flyway-core"                          % "3.2.1",
     "com.typesafe.slick" %% "slick"                                % slickVersion,
-    "org.scalatest"      %% "scalatest"                            % scalaTestVersion % "it,test",
-    "org.scalamock"      %% "scalamock-scalatest-support"          % scalaMockVersion % "it,test",
-    "com.typesafe.akka"  %% "akka-http-testkit-experimental"       % akkaStreamVersion      % "it,test"
+    //"org.scalatest"      %% "scalatest"                            % scalaTestVersion % "test",
+    "org.scalamock"      %% "scalamock-scalatest-support"          % scalaMockVersion % "test",
+    "com.typesafe.akka"  %% "akka-http-testkit-experimental"       % akkaStreamVersion      % "test",
+    "org.json4s"        %% "json4s-native"   % Json4sVersion,
+    "org.json4s"        %% "json4s-ext"      % Json4sVersion,
+    "de.heikoseeberger" %% "akka-http-json4s" % "1.4.2"
   )
 }
 
@@ -82,9 +87,9 @@ publishArtifact in Test := false
 pomIncludeRepository := { _ => false }
 
 // Assembly settings
-//mainClass in Global := Some("com.datiobd.mike.Main")
+mainClass in Global := Some("com.datiobd.mike.Main")
 
-jarName in assembly := "mike-ingestion-api-scala-akka-poc-1.jar"
+jarName in assembly := "mike-ingestion-reactive-api-poc-1.jar"
 
 lazy val root = project.in(file(".")).configs(IntegrationTest)
 Defaults.itSettings

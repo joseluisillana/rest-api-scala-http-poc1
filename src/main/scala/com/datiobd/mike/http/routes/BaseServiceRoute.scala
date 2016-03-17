@@ -8,7 +8,7 @@ import com.datiobd.mike.utils.{ Config, Protocol }
 import scala.concurrent.ExecutionContext
 
 trait BaseServiceRoute extends Protocol with SprayJsonSupport with Config {
-  protected implicit def executor: ExecutionContext
+  implicit def executionContext: ExecutionContext
   protected implicit def materializer: ActorMaterializer
   protected def log: LoggingAdapter
 }

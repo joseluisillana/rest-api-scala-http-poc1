@@ -5,12 +5,17 @@ import com.typesafe.config.ConfigFactory
 trait Config {
   private val config = ConfigFactory.load()
   private val httpConfig = config.getConfig("http")
-  private val databaseConfig = config.getConfig("database")
+  private val kafkaConfig = config.getConfig("kafka")
 
-  val httpInterface = httpConfig.getString("interface")
+  val httpInterface = httpConfig.getString("host")
   val httpPort = httpConfig.getInt("port")
 
-  val databaseUrl = databaseConfig.getString("url")
-  val databaseUser = databaseConfig.getString("user")
-  val databasePassword = databaseConfig.getString("password")
+  val kafkaBrokerList= kafkaConfig.getString("kafka.broker.list")
+
+  // KAFKA PRODUCER TUNNING
+  val kafkaRequestRequiredAcks = kafkaConfig.getInt("kafka.request.required.acks")
+  val kafkaProducerType = kafkaConfig.getString("kafka.producer.type")
+  val kafkaBatchNumMessages = kafkaConfig.getInt("kafka.batch.num.messages")
+  val kafkaQueueBufferingMaxMS = kafkaConfig.getInt("kafka.queue.buffering.max.ms")
+
 }
